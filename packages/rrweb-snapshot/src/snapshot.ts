@@ -433,6 +433,7 @@ function serializeNode(
     dataURLOptions?: DataURLOptions;
     inlineImages: boolean;
     recordCanvas: boolean;
+    noAbsolute: boolean;
     keepIframeSrcFn: KeepIframeSrcFn;
     /**
      * `newlyAddedElement: true` skips scrollTop and scrollLeft check
@@ -454,6 +455,7 @@ function serializeNode(
     dataURLOptions = {},
     inlineImages,
     recordCanvas,
+    noAbsolute,
     keepIframeSrcFn,
     newlyAddedElement = false,
   } = options;
@@ -492,6 +494,7 @@ function serializeNode(
         dataURLOptions,
         inlineImages,
         recordCanvas,
+        noAbsolute,
         keepIframeSrcFn,
         newlyAddedElement,
         rootId,
@@ -597,6 +600,7 @@ function serializeElementNode(
     dataURLOptions?: DataURLOptions;
     inlineImages: boolean;
     recordCanvas: boolean;
+    noAbsolute: boolean;
     keepIframeSrcFn: KeepIframeSrcFn;
     /**
      * `newlyAddedElement: true` skips scrollTop and scrollLeft check
@@ -615,6 +619,7 @@ function serializeElementNode(
     dataURLOptions = {},
     inlineImages,
     recordCanvas,
+    noAbsolute,
     keepIframeSrcFn,
     newlyAddedElement = false,
     rootId,
@@ -626,12 +631,9 @@ function serializeElementNode(
   for (let i = 0; i < len; i++) {
     const attr = n.attributes[i];
     if (!ignoreAttribute(tagName, attr.name, attr.value)) {
-      attributes[attr.name] = transformAttribute(
-        doc,
-        tagName,
-        attr.name,
-        attr.value,
-      );
+      attributes[attr.name] = noAbsolute
+        ? attr.value
+        : transformAttribute(doc, tagName, attr.name, attr.value);
     }
   }
   // remote css
@@ -646,7 +648,9 @@ function serializeElementNode(
     if (cssText) {
       delete attributes.rel;
       delete attributes.href;
-      attributes._cssText = absoluteToStylesheet(cssText, stylesheet!.href!);
+      attributes._cssText = noAbsolute
+        ? cssText
+        : absoluteToStylesheet(cssText, stylesheet!.href!);
     }
   }
   // dynamic stylesheet
@@ -660,7 +664,9 @@ function serializeElementNode(
       (n as HTMLStyleElement).sheet as CSSStyleSheet,
     );
     if (cssText) {
-      attributes._cssText = absoluteToStylesheet(cssText, getHref());
+      attributes._cssText = noAbsolute
+        ? cssText
+        : absoluteToStylesheet(cssText, getHref());
     }
   }
   // form fields
@@ -935,6 +941,7 @@ export function serializeNodeWithId(
     keepIframeSrcFn?: KeepIframeSrcFn;
     inlineImages?: boolean;
     recordCanvas?: boolean;
+    noAbsolute?: boolean;
     preserveWhiteSpace?: boolean;
     onSerialize?: (n: Node) => unknown;
     onIframeLoad?: (
@@ -965,6 +972,7 @@ export function serializeNodeWithId(
     dataURLOptions = {},
     inlineImages = false,
     recordCanvas = false,
+    noAbsolute = false,
     onSerialize,
     onIframeLoad,
     iframeLoadTimeout = 5000,
@@ -988,6 +996,7 @@ export function serializeNodeWithId(
     dataURLOptions,
     inlineImages,
     recordCanvas,
+    noAbsolute,
     keepIframeSrcFn,
     newlyAddedElement,
   });

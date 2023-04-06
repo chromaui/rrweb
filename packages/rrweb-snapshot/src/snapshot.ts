@@ -1218,6 +1218,7 @@ function snapshot(
     dataURLOptions?: DataURLOptions;
     inlineImages?: boolean;
     recordCanvas?: boolean;
+    noAbsolute?: boolean;
     preserveWhiteSpace?: boolean;
     onSerialize?: (n: Node) => unknown;
     onIframeLoad?: (
@@ -1242,6 +1243,7 @@ function snapshot(
     inlineStylesheet = true,
     inlineImages = false,
     recordCanvas = false,
+    noAbsolute = false,
     maskAllInputs = false,
     maskTextFn,
     maskInputFn,
@@ -1314,6 +1316,7 @@ function snapshot(
     dataURLOptions,
     inlineImages,
     recordCanvas,
+    noAbsolute,
     preserveWhiteSpace,
     onSerialize,
     onIframeLoad,

@@ -380,6 +380,17 @@ function buildNode(
          */
         if (!node.shadowRoot) {
           node.attachShadow({ mode: 'open' });
+          // @ts-expect-error TODO
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+          n.chromaticAdoptedStylesheets.forEach(
+            // @ts-expect-error TODO
+            (chromaticAdoptedStylesheet) => {
+              const styleSheet = new CSSStyleSheet();
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+              styleSheet.replaceSync(chromaticAdoptedStylesheet);
+              node.shadowRoot?.adoptedStyleSheets.push(styleSheet);
+            },
+          );
         } else {
           while (node.shadowRoot.firstChild) {
             node.shadowRoot.removeChild(node.shadowRoot.firstChild);
@@ -443,6 +454,18 @@ export function buildNodeWithSN(
   if (!node) {
     return null;
   }
+  // // @ts-expect-error TODO
+  // if (n.chromaticAdoptedStylesheets) {
+  //   // @ts-expect-error TODO
+  //   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+  //   n.chromaticAdoptedStylesheets.forEach((sheet) => {
+  //     const styleSheet = new CSSStyleSheet();
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  //     styleSheet.replaceSync(sheet);
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+  //     doc.adoptedStyleSheets.push(styleSheet);
+  //   });
+  // }
   // If the snapshot is created by checkout, the rootId doesn't change but the iframe's document can be changed automatically when a new iframe element is created.
   if (n.rootId && (mirror.getNode(n.rootId) as Document) !== doc) {
     mirror.replace(n.rootId, doc);

@@ -1008,7 +1008,10 @@ export function serializeNodeWithId(
     id = genId();
   }
 
-  const serializedNode = Object.assign(_serializedNode, { id });
+  const serializedNode: serializedNode & {
+    id: number;
+    chromaticAdoptedStylesheets?: Array<string | null>;
+  } = Object.assign(_serializedNode, { id });
   // add IGNORED_NODE to mirror to track nextSiblings
   mirror.add(n, serializedNode);
 
@@ -1022,7 +1025,6 @@ export function serializeNodeWithId(
   let recordChild = !skipChild;
   // @ts-expect-error TODO
   if (n.adoptedStyleSheets) {
-    // @ts-expect-error TODO
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
     serializedNode.chromaticAdoptedStylesheets =
       // @ts-expect-error TODO
@@ -1046,12 +1048,9 @@ export function serializeNodeWithId(
     if (shadowRootEl && isNativeShadowDom(shadowRootEl)) {
       serializedNode.isShadowHost = true;
       if (shadowRootEl.adoptedStyleSheets) {
-        // @ts-expect-error TODO
         serializedNode.chromaticAdoptedStylesheets =
-          shadowRootEl.adoptedStyleSheets.map((sheet) =>
-            Array.from(sheet.cssRules)
-              .map((rule) => rule.cssText)
-              .join(' '),
+          shadowRootEl.adoptedStyleSheets.map((stylesheet) =>
+            stringifyStylesheet(stylesheet),
           );
       }
     }

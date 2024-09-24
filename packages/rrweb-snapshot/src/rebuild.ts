@@ -152,7 +152,7 @@ export function buildStyleNode(
 }
 
 function buildNode(
-  n: serializedNodeWithId,
+  n: serializedNodeWithId & { chromaticAdoptedStylesheets?: string[] },
   options: {
     doc: Document;
     hackCss: boolean;
@@ -380,13 +380,9 @@ function buildNode(
          */
         if (!node.shadowRoot) {
           node.attachShadow({ mode: 'open' });
-          // @ts-expect-error TODO
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-          n.chromaticAdoptedStylesheets.forEach(
-            // @ts-expect-error TODO
+          n.chromaticAdoptedStylesheets?.forEach(
             (chromaticAdoptedStylesheet) => {
               const styleSheet = new CSSStyleSheet();
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               styleSheet.replaceSync(chromaticAdoptedStylesheet);
               node.shadowRoot?.adoptedStyleSheets.push(styleSheet);
             },

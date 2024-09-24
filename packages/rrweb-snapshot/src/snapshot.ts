@@ -895,6 +895,8 @@ function slimDOMExcluded(
   return false;
 }
 
+const constructedStylesheets = {};
+
 export function serializeNodeWithId(
   n: Node,
   options: {
@@ -1044,6 +1046,10 @@ export function serializeNodeWithId(
     if (shadowRootEl && isNativeShadowDom(shadowRootEl)) {
       serializedNode.isShadowHost = true;
       if (shadowRootEl.adoptedStyleSheets) {
+        // @ts-expect-error asdf
+        constructedStylesheets['a'] = shadowRootEl.adoptedStyleSheets.map(
+          (stylesheet) => stringifyStylesheet(stylesheet),
+        );
         serializedNode.chromaticAdoptedStylesheets =
           shadowRootEl.adoptedStyleSheets.map((stylesheet) =>
             stringifyStylesheet(stylesheet),
@@ -1329,7 +1335,8 @@ function snapshot(
       : slimDOM === false
       ? {}
       : slimDOM;
-  return serializeNodeWithId(n, {
+
+  const serializedNode = serializeNodeWithId(n, {
     doc: n,
     mirror,
     blockClass,
@@ -1354,6 +1361,11 @@ function snapshot(
     keepIframeSrcFn,
     newlyAddedElement: false,
   });
+
+  // @ts-expect-error asdf
+  serializedNode.constructedStylesheets = constructedStylesheets;
+
+  return serializedNode;
 }
 
 export function visitSnapshot(

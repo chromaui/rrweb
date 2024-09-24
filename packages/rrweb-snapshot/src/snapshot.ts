@@ -1050,10 +1050,6 @@ export function serializeNodeWithId(
         constructedStylesheets['a'] = shadowRootEl.adoptedStyleSheets.map(
           (stylesheet) => stringifyStylesheet(stylesheet),
         );
-        serializedNode.chromaticAdoptedStylesheets =
-          shadowRootEl.adoptedStyleSheets.map((stylesheet) =>
-            stringifyStylesheet(stylesheet),
-          );
       }
     }
   }
@@ -1363,7 +1359,8 @@ function snapshot(
   });
 
   // @ts-expect-error asdf
-  serializedNode.constructedStylesheets = constructedStylesheets;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  serializedNode.childNodes[1].constructedStylesheets = constructedStylesheets;
 
   return serializedNode;
 }

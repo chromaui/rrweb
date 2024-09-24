@@ -380,13 +380,14 @@ function buildNode(
          */
         if (!node.shadowRoot) {
           node.attachShadow({ mode: 'open' });
-          n.chromaticAdoptedStylesheets?.forEach(
-            (chromaticAdoptedStylesheet) => {
-              const styleSheet = new CSSStyleSheet();
-              styleSheet.replaceSync(chromaticAdoptedStylesheet);
-              node.shadowRoot?.adoptedStyleSheets.push(styleSheet);
-            },
-          );
+          // @ts-expect-error asdf
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+          constructedStylesheets['a']?.forEach((chromaticAdoptedStylesheet) => {
+            const styleSheet = new CSSStyleSheet();
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            styleSheet.replaceSync(chromaticAdoptedStylesheet);
+            node.shadowRoot?.adoptedStyleSheets.push(styleSheet);
+          });
         } else {
           while (node.shadowRoot.firstChild) {
             node.shadowRoot.removeChild(node.shadowRoot.firstChild);
@@ -590,6 +591,8 @@ function handleScroll(node: Node, mirror: Mirror) {
   }
 }
 
+let constructedStylesheets = {};
+
 function rebuild(
   n: serializedNodeWithId,
   options: {
@@ -609,6 +612,10 @@ function rebuild(
     cache,
     mirror = new Mirror(),
   } = options;
+
+  // @ts-expect-error asdf
+  //eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  constructedStylesheets = n.constructedStylesheets;
   const node = buildNodeWithSN(n, {
     doc,
     mirror,

@@ -1030,7 +1030,7 @@ export function serializeNodeWithId(
     const shadowRootEl = dom.shadowRoot(n);
     if (shadowRootEl && isNativeShadowDom(shadowRootEl)) {
       serializedNode.isShadowHost = true;
-      if (shadowRootEl.adoptedStyleSheets) {
+      if (shadowRootEl.adoptedStyleSheets.length > 0) {
         serializedNode.chromaticAdoptedStylesheets =
           shadowRootEl.adoptedStyleSheets.map((stylesheet) =>
             stringifyStylesheet(stylesheet),

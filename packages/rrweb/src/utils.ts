@@ -9,8 +9,12 @@ import type {
   DeprecatedMirror,
   textMutation,
 } from '@rrweb/types';
-import type { IMirror, Mirror, SlimDOMOptions } from 'rrweb-snapshot';
-import { isShadowRoot, IGNORED_NODE, classMatchesRegex } from 'rrweb-snapshot';
+import type { IMirror, Mirror, SlimDOMOptions } from '@chromaui/rrweb-snapshot';
+import {
+  isShadowRoot,
+  IGNORED_NODE,
+  classMatchesRegex,
+} from '@chromaui/rrweb-snapshot';
 import { RRNode, RRIFrameElement, BaseRRNode } from 'rrdom';
 import dom from '@rrweb/utils';
 

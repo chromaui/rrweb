@@ -1,5 +1,5 @@
 import type { RRNode } from 'rrdom';
-import type { Mirror } from 'rrweb-snapshot';
+import type { Mirror } from '@chromaui/rrweb-snapshot';
 import SimplePeer from 'simple-peer-light';
 import type { ReplayPlugin, Replayer } from 'rrweb';
 import type { WebRTCDataChannel } from './types';

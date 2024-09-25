@@ -10,8 +10,8 @@ import {
   initAdoptedStyleSheetObserver,
 } from './observer';
 import { patch, inDom } from '../utils';
-import type { Mirror } from 'rrweb-snapshot';
-import { isNativeShadowDom } from 'rrweb-snapshot';
+import type { Mirror } from '@chromaui/rrweb-snapshot';
+import { isNativeShadowDom } from '@chromaui/rrweb-snapshot';
 import dom from '@rrweb/utils';
 
 type BypassOptions = Omit<

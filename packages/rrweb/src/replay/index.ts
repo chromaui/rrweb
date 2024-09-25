@@ -10,7 +10,7 @@ import {
   type attributes,
   type serializedElementNodeWithId,
   toLowerCase,
-} from 'rrweb-snapshot';
+} from '@chromaui/rrweb-snapshot';
 import {
   RRDocument,
   createOrGetNode,

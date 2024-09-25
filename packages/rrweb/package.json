@@ -87,6 +87,6 @@
     "base64-arraybuffer": "^1.0.1",
     "mitt": "^3.0.0",
     "rrdom": "^2.0.0-alpha.17",
-    "rrweb-snapshot": "^2.0.0-alpha.17"
+    "@chromaui/rrweb-snapshot": "2.0.0-alpha.17-noAbsolute"
   }
 }

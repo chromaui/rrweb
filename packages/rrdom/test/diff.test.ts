@@ -10,7 +10,7 @@ import {
   createMirror,
   Mirror as NodeMirror,
   serializedNodeWithId,
-} from 'rrweb-snapshot';
+} from '@chromaui/rrweb-snapshot';
 import {
   buildFromDom,
   getDefaultSN,

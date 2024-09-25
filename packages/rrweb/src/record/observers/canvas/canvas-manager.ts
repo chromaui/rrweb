@@ -1,4 +1,4 @@
-import type { ICanvas, Mirror, DataURLOptions } from 'rrweb-snapshot';
+import type { ICanvas, Mirror, DataURLOptions } from '@chromaui/rrweb-snapshot';
 import type {
   blockClass,
   canvasManagerMutationCallback,

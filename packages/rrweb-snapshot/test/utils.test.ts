@@ -9,7 +9,7 @@ import {
   fixSafariColons,
   isNodeMetaEqual,
 } from '../src/utils';
-import type { serializedNodeWithId } from 'rrweb-snapshot';
+import type { serializedNodeWithId } from '@chromaui/rrweb-snapshot';
 
 describe('utils', () => {
   describe('isNodeMetaEqual()', () => {

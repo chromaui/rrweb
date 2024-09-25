@@ -2,7 +2,7 @@ import {
   NodeType as RRNodeType,
   Mirror as NodeMirror,
   type elementNode,
-} from 'rrweb-snapshot';
+} from '@chromaui/rrweb-snapshot';
 import type {
   canvasMutationData,
   canvasEventWithTime,

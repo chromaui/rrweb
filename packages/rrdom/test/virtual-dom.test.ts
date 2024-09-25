@@ -16,7 +16,7 @@ import {
   NodeType,
   NodeType as RRNodeType,
   textNode,
-} from 'rrweb-snapshot';
+} from '@chromaui/rrweb-snapshot';
 import {
   buildFromDom,
   buildFromNode,

@@ -1,4 +1,4 @@
-import { NodeType } from 'rrweb-snapshot';
+import { NodeType } from '@chromaui/rrweb-snapshot';
 import { expect } from 'vitest';
 import {
   EventType,

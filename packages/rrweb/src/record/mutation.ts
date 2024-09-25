@@ -10,7 +10,7 @@ import {
   isNativeShadowDom,
   getInputType,
   toLowerCase,
-} from 'rrweb-snapshot';
+} from '@chromaui/rrweb-snapshot';
 import type { observerParam, MutationBufferParam } from '../types';
 import type {
   mutationRecord,
@@ -349,7 +349,6 @@ export default class MutationBuffer {
         onStylesheetLoad: (link, childSn) => {
           this.stylesheetManager.attachLinkElement(link, childSn);
         },
-        // @ts-expect-error cssCaptured isn't specified as an accepted property,
         // but we didn't touch anything near here, so ignoring for now
         cssCaptured,
       });

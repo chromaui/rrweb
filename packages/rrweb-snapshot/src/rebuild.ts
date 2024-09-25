@@ -152,7 +152,7 @@ export function buildStyleNode(
 }
 
 function buildNode(
-  n: serializedNodeWithId,
+  n: serializedNodeWithId & { chromaticAdoptedStylesheets?: string[] },
   options: {
     doc: Document;
     hackCss: boolean;
@@ -380,6 +380,13 @@ function buildNode(
          */
         if (!node.shadowRoot) {
           node.attachShadow({ mode: 'open' });
+          n.chromaticAdoptedStylesheets?.forEach(
+            (chromaticAdoptedStylesheet) => {
+              const styleSheet = new CSSStyleSheet();
+              styleSheet.replaceSync(chromaticAdoptedStylesheet);
+              node.shadowRoot?.adoptedStyleSheets.push(styleSheet);
+            },
+          );
         } else {
           while (node.shadowRoot.firstChild) {
             node.shadowRoot.removeChild(node.shadowRoot.firstChild);

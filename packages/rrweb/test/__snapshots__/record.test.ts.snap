@@ -628,7 +628,10 @@ exports[`record > captures adopted stylesheets in nested shadow doms and iframes
                         \\"childNodes\\": [],
                         \\"rootId\\": 29,
                         \\"id\\": 33,
-                        \\"isShadowHost\\": true
+                        \\"isShadowHost\\": true,
+                        \\"chromaticAdoptedStylesheets\\": [
+                          \\"div { font-size: large; }\\"
+                        ]
                       }
                     ],
                     \\"rootId\\": 29,
@@ -849,7 +852,11 @@ exports[`record > captures adopted stylesheets in shadow doms and iframe 1`] = `
                       }
                     ],
                     \\"id\\": 10,
-                    \\"isShadowHost\\": true
+                    \\"isShadowHost\\": true,
+                    \\"chromaticAdoptedStylesheets\\": [
+                      \\"div { color: yellow; }h2 { color: orange; }h3 { font-size: larger; }\\",
+                      \\"span { color: red; }\\"
+                    ]
                   },
                   {
                     \\"type\\": 3,
@@ -1204,7 +1211,10 @@ exports[`record > captures adopted stylesheets of shadow doms in checkout full s
                       }
                     ],
                     \\"id\\": 7,
-                    \\"isShadowHost\\": true
+                    \\"isShadowHost\\": true,
+                    \\"chromaticAdoptedStylesheets\\": [
+                      \\"h1 { color: blue; }\\"
+                    ]
                   },
                   {
                     \\"type\\": 3,
@@ -1304,7 +1314,10 @@ exports[`record > captures adopted stylesheets of shadow doms in checkout full s
                       }
                     ],
                     \\"id\\": 7,
-                    \\"isShadowHost\\": true
+                    \\"isShadowHost\\": true,
+                    \\"chromaticAdoptedStylesheets\\": [
+                      \\"h1 { color: blue; }\\"
+                    ]
                   },
                   {
                     \\"type\\": 3,

@@ -2,14 +2,17 @@ import { mediaSelectorPlugin, pseudoClassPlugin } from './css';
 import {
   type serializedNodeWithId,
   type serializedElementNodeWithId,
-  type serializedTextNodeWithId,
   NodeType,
-  type tagMap,
   type elementNode,
-  type BuildCache,
   type legacyAttributes,
-} from './types';
-import { isElement, Mirror, isNodeMetaEqual } from './utils';
+} from '@rrweb/types';
+import { type tagMap, type BuildCache } from './types';
+import {
+  isElement,
+  Mirror,
+  isNodeMetaEqual,
+  extractFileExtension,
+} from './utils';
 import postcss from 'postcss';
 
 const tagMap: tagMap = {
@@ -64,11 +67,17 @@ export function adaptCssForReplay(cssText: string, cache: BuildCache): string {
   const cachedStyle = cache?.stylesWithHoverClass.get(cssText);
   if (cachedStyle) return cachedStyle;
 
-  const ast: { css: string } = postcss([
-    mediaSelectorPlugin,
-    pseudoClassPlugin,
-  ]).process(cssText);
-  const result = ast.css;
+  let result = cssText;
+  try {
+    const ast: { css: string } = postcss([
+      mediaSelectorPlugin,
+      pseudoClassPlugin,
+    ]).process(cssText);
+    result = ast.css;
+  } catch (error) {
+    console.warn('Failed to adapt css for replay', error);
+  }
+
   cache?.stylesWithHoverClass.set(cssText, result);
   return result;
 }
@@ -90,7 +99,7 @@ export function applyCssSplits(
   hackCss: boolean,
   cache: BuildCache,
 ): void {
-  const childTextNodes: serializedTextNodeWithId[] = [];
+  const childTextNodes = [];
   for (const scn of n.childNodes) {
     if (scn.type === NodeType.Text) {
       childTextNodes.push(scn);
@@ -104,15 +113,44 @@ export function applyCssSplits(
     // unexpected: remerge the last two so that we don't discard any css
     cssTextSplits.splice(-2, 2, cssTextSplits.slice(-2).join(''));
   }
+  let adaptedCss = '';
+  if (hackCss) {
+    adaptedCss = adaptCssForReplay(cssTextSplits.join(''), cache);
+  }
+  let startIndex = 0;
   for (let i = 0; i < childTextNodes.length; i++) {
+    if (i === cssTextSplits.length) {
+      break;
+    }
     const childTextNode = childTextNodes[i];
-    const cssTextSection = cssTextSplits[i];
-    if (childTextNode && cssTextSection) {
-      // id will be assigned when these child nodes are
-      // iterated over in buildNodeWithSN
-      childTextNode.textContent = hackCss
-        ? adaptCssForReplay(cssTextSection, cache)
-        : cssTextSection;
+    if (!hackCss) {
+      childTextNode.textContent = cssTextSplits[i];
+    } else if (i < cssTextSplits.length - 1) {
+      let endIndex = startIndex;
+      let endSearch = cssTextSplits[i + 1].length;
+
+      // don't do hundreds of searches, in case a mismatch
+      // is caused close to start of string
+      endSearch = Math.min(endSearch, 30);
+
+      let found = false;
+      for (; endSearch > 2; endSearch--) {
+        const searchBit = cssTextSplits[i + 1].substring(0, endSearch);
+        const searchIndex = adaptedCss.substring(startIndex).indexOf(searchBit);
+        found = searchIndex !== -1;
+        if (found) {
+          endIndex += searchIndex;
+          break;
+        }
+      }
+      if (!found) {
+        // something went wrong, put a similar sized chunk in the right place
+        endIndex += cssTextSplits[i].length;
+      }
+      childTextNode.textContent = adaptedCss.substring(startIndex, endIndex);
+      startIndex = endIndex;
+    } else {
+      childTextNode.textContent = adaptedCss.substring(startIndex);
     }
   }
 }
@@ -266,16 +304,15 @@ function buildNode(
             continue;
           } else if (
             tagName === 'link' &&
-            (n.attributes.rel === 'preload' ||
-              n.attributes.rel === 'modulepreload') &&
-            n.attributes.as === 'script'
+            ((n.attributes.rel === 'preload' && n.attributes.as === 'script') ||
+              n.attributes.rel === 'modulepreload')
           ) {
             // ignore
           } else if (
             tagName === 'link' &&
             n.attributes.rel === 'prefetch' &&
             typeof n.attributes.href === 'string' &&
-            n.attributes.href.endsWith('.js')
+            extractFileExtension(n.attributes.href) === 'js'
           ) {
             // ignore
           } else if (
@@ -328,9 +365,9 @@ function buildNode(
         }
 
         if (name === 'rr_width') {
-          (node as HTMLElement).style.width = value.toString();
+          (node as HTMLElement).style.setProperty('width', value.toString());
         } else if (name === 'rr_height') {
-          (node as HTMLElement).style.height = value.toString();
+          (node as HTMLElement).style.setProperty('height', value.toString());
         } else if (
           name === 'rr_mediaCurrentTime' &&
           typeof value === 'number'

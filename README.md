@@ -27,9 +27,13 @@ Chromatic maintains this fork of `rrweb-io/rrweb` solely to publish a version of
 
 To distinguish Chromatic-specific builds from those coming from rrweb-io, a `-noAbsolute` label is appended to the end of the package version. If more than one Chromatic build is produced based off of the same rrweb-io version, a number is appended to the end of that label (e.g. `2.0.0-alpha.17-noAbsolute.1`).
 
-1. In `packages/rrweb-snapshot/package.json`, set the appropriate `-noAbsolute.X` version
-2. CD to `packages/rrweb-snapshot`
-3. Run `npm publish`
+1. Switch to branch `master` and pull latest
+2. In `packages/rrweb-snapshot/package.json`, set the appropriate `-noAbsolute.X` version
+3. Run `cd packages/rrweb-snapshot`
+4. Run `yarn test` and ensure all passes
+5. Run `yarn build`
+6. Run `npm publish`
+
 
 ## Guide
 

@@ -23,13 +23,15 @@ rrweb refers to 'record and replay the web', which is a tool for recording and r
 
 ## Publishing @chromaui/rrweb-snapshot
 
-Chromatic maintains this fork of `rrweb-io/rrweb` solely to publish a version of `rrweb-snapshot` that supports constructable stylesheets for Chromatic e2e capture purposes.
+Chromatic maintains this fork of `rrweb-io/rrweb` solely to publish a version of `rrweb-snapshot` that supports constructable stylesheets for Chromatic e2e capture purposes. Chromatic changes are on branch `chromatic-main`.
 
 To distinguish Chromatic-specific builds from those coming from rrweb-io, a `-noAbsolute` label is appended to the end of the package version. If more than one Chromatic build is produced based off of the same rrweb-io version, a number is appended to the end of that label (e.g. `2.0.0-alpha.17-noAbsolute.1`).
 
-1. In `packages/rrweb-snapshot/package.json`, set the appropriate `-noAbsolute.X` version
-2. CD to `packages/rrweb-snapshot`
-3. Run `npm publish`
+1. Switch to branch `chromatic-main`
+2. In `packages/rrweb-snapshot/package.json`, set the appropriate `-noAbsolute.X` version
+3. Run `cd packages/rrweb-snapshot`
+4. Run `yarn build`
+5. Run `npm publish`
 
 ## Guide
 

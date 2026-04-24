@@ -32,6 +32,21 @@ const pseudoClassPlugin: AcceptedPlugin = {
           if (selector.includes(':hover')) {
             rule.selector += ',\n' + selector.replace(/:hover/g, '.\\:hover');
           }
+          if (selector.includes(':active')) {
+            rule.selector += ',\n' + selector.replace(/:active/g, '.\\:active');
+          }
+          if (selector.includes(':focus-visible')) {
+            rule.selector +=
+              ',\n' + selector.replace(/:focus-visible/g, '.\\:focus-visible');
+          }
+          if (selector.includes(':focus-within')) {
+            rule.selector +=
+              ',\n' + selector.replace(/:focus-within/g, '.\\:focus-within');
+          }
+          if (/:focus(?![-\w])/.test(selector)) {
+            rule.selector +=
+              ',\n' + selector.replace(/:focus(?![-\w])/g, '.\\:focus');
+          }
         });
       },
     };
